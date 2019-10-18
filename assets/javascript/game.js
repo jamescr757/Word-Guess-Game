@@ -9,7 +9,7 @@ var game = {
     word: 'string',
     numGuesses: 0,
     userGuesses: [],
-    endMessage: 0,
+    endCount: 0,
     isPlaying: true,
     letterBank: ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', 'p', 'y', 'f', 'g', 'c', 'r', 'l', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z'],    
 
@@ -80,6 +80,11 @@ var game = {
 
         // number of blankspaces to track user progress
         this.blankSpaces = this.word.length;
+    },
+
+    endMessage(message) {
+        this.render('#word-p', '');
+        this.addText('span', message, '#word-p', 'p-message');
     }
 };
 
@@ -156,22 +161,19 @@ document.onkeyup = function(event) {
             game.render('#wins-span', game.wins);
 
             // empty p#word-p and replace with message
-            game.render('#word-p', '');
-            game.addText('span', "You win! Thanks for playing! Press any key to play again", '#word-p', 'p-message');
+
+            game.endMessage("You win! Thanks for playing! Press any key to play again");
 
             if (game.wins > 5) {
-                game.render('#word-p', '');
-                game.addText('span', "You're incredible at this game!", '#word-p', 'p-message');
+                game.endMessage("You're incredible at this game!");
             }
 
             if (game.wins > 6) {
-                game.render('#word-p', '');
-                game.addText('span', "You're too good at this game!", '#word-p', 'p-message');
+                game.endMessage("You're too good at this game!");
             }
 
             if (game.wins > 7) {
-                game.render('#word-p', '');
-                game.addText('span', "Legendary status", '#word-p', 'p-message');
+                game.endMessage("Legendary status");
             }
         }
 
@@ -182,21 +184,21 @@ document.onkeyup = function(event) {
             game.isPlaying = false;
 
             // empty p#word-p and replace with message
-            game.render('#word-p', '');
-            game.addText('span', "Game over! Thanks for playing! Press any key to play again", '#word-p', 'p-message');
+
+            game.endMessage("Game over! Thanks for playing! Press any key to play again")
         }
     }
 
     if (!game.isPlaying) {
         // console.log("reached last if statement");
-        game.endMessage++;
+        game.endCount++;
         // reset the game second time enter this if statement
-        if (game.endMessage > 1) {
+        if (game.endCount > 1) {
             game.render('#word-p', '');
             game.render('#letters-p', 'Letters already guessed: ');
             game.wordBlankGenerator();
             game.render('#guess-span', game.numGuesses);
-            game.endMessage = 0;
+            game.endCount = 0;
             game.isPlaying = true;
             game.userGuesses = [];
         }
