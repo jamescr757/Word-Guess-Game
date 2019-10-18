@@ -10,7 +10,6 @@ var game = {
     numGuesses: 0,
     userGuesses: [],
     endMessage: 0,
-    userWord: [],
     isPlaying: true,
     letterBank: ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', 'p', 'y', 'f', 'g', 'c', 'r', 'l', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z'],    
 
