@@ -12,9 +12,10 @@ p {
     margin: 1rem 0;
 }
 
-.p-message {
+#message-p {
     font-weight: bold;
     color: blue;
+    font-size: 1.25rem;
 }
 
 #word-p span {

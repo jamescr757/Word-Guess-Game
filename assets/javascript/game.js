@@ -12,18 +12,25 @@ var game = {
     userGuesses: [],
     endCount: 0,
     isPlaying: true,
-    letterBank: ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', 'p', 'y', 'f', 'g', 'c', 'r', 'l', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z'],    
+    letterBank: ['a', 'o', 'e', 'u', 'i', 'd', 'h', 't', 'n', 's', 'p', 'y', 'f', 'g', 'c', 'r', 'l', 'q', 'j', 'k', 'x', 'b', 'm', 'w', 'v', 'z'], 
+    winMessages: ["Legendary status", "You're too good at this game!", "You're incredible at this game!", "You're on a roll!", "Hangman master", "Hangman jedi", "You sure know your sports", "Here's a cookie for being a great speller", "I guess you like this game", "Keep piling up those wins", "Winner! You know the drill", "Winner winner chicken dinner!", "I can play all day, can you?", "You didn't lose! Congrats", "How many wins can you string together?"],   
 
     // passed test 
     wordGenerator() {
         // get random index number
-
         var randomNum = Math.floor(Math.random() * this.wordBank.length);
 
-        // console.log(randomNum);
         // return random word from word bank 
-
         return this.wordBank[randomNum];
+    },
+
+    //passed test
+    winMessageGenerator() {
+        // get random index number
+        var randomNum = Math.floor(Math.random() * this.winMessages.length);
+
+        // return random word from word bank 
+        return this.winMessages[randomNum];
     },
 
     // method to grab element from html doc to manipulate
@@ -66,12 +73,10 @@ var game = {
     // passed test
     wordBlankGenerator() {
         this.word = this.wordGenerator();
-        // console.log(this.word);
-        
+
         // grab p tag that contains word blanks 
         // need to loop through the word and create a span tag for each word and render a blank on the page 
         // use addText method
-
         for (var i = 0; i < this.word.length; i ++) {
             this.addText('span', '_', '#word-p', 'span-' + i);
         }
@@ -84,25 +89,18 @@ var game = {
     },
 
     endMessage(message) {
-        this.render('#word-p', '');
-        this.addText('span', message, '#word-p', 'p-message');
+        this.render('#message-p', '');
+        this.addText('span', message, '#message-p', 'p-message');
     }
 };
 
-// console.log(game.letterBank.length);
 // game.render('wins-span', 10);
 game.wordBlankGenerator();
 game.render('#guess-span', game.numGuesses);
-// console.log(game.userGuesses);
 
-
-// console.log(game.blankSpaces);
-// console.log(game.wordGenerator());
 // key event logic
 document.onkeyup = function(event) {
     var userLetter = event.key.toLowerCase();
-    // console.log(userLetter);
-    
 
     // reset game.correctAnswer to always start false
     var correctAnswer = false;
@@ -116,32 +114,18 @@ document.onkeyup = function(event) {
         // need a way to track how many letters have been guessed correctly 
         // placed this logic in word blank generator 
         
-        // console.log(game.word);
         // check if userLetter is in the word 
         var userLetterIndex = game.word.indexOf(userLetter);
-        // console.log(userLetterIndex);
         var userGuessIndex = game.userGuesses.indexOf(userLetter);
-        // console.log(userGuessIndex);
-        // console.log("blank spaces", game.blankSpaces);
+
         while (userLetterIndex > -1) {
-            // console.log("i made it into the while loop");
-            
             game.render('.span-' + userLetterIndex, userRender);
             userLetterIndex = game.word.indexOf(userLetter, userLetterIndex + 1);
-            // console.log(userLetterIndex);
             
-
             // flip correct answer switch to deactivate if statement below
             correctAnswer = true;
-            // console.log("correct answer is", correctAnswer);
-            
-            // break;
-            
         } 
-
-        // console.log("correct answer before if statement", correctAnswer);
         
-        // console.log("userLetter is", userLetter);
         if (userGuessIndex === -1 && !correctAnswer) {
             game.addText('span', userRender + ' ', '#letters-p', 'user-span');
             game.userGuesses.push(userLetter);
@@ -151,12 +135,10 @@ document.onkeyup = function(event) {
             game.render('#guess-span', game.numGuesses);
         }
         
-        // console.log(game.getDomElement('#word-p').textContent.toLowerCase());
-        
         // need if statement for user winning 
         // this happens when there are no more blank spaces 
+        // increase game total by one 
         if (game.getDomElement('#word-p').textContent.toLowerCase() === game.word) {
-            // console.log("reached winning if statement");
             game.isPlaying = false;
             game.wins++;
             game.render('#wins-span', game.wins);
@@ -164,28 +146,29 @@ document.onkeyup = function(event) {
             game.gameCount++;
             game.render('#games-span', game.gameCount);
 
-            // empty p#word-p and replace with message
-
             game.endMessage("You win! Thanks for playing! Press any key to play again");
 
-            if (game.wins > 5) {
-                game.endMessage("You're incredible at this game!");
-            }
-
-            if (game.wins > 6) {
-                game.endMessage("You're too good at this game!");
-            }
-
-            if (game.wins > 7) {
-                game.endMessage("Legendary status");
+            // should probably randomly pull from end messages array 
+            if (game.wins > 3) {
+                const message = game.winMessageGenerator();
+                game.endMessage(message);
             }
         }
 
         // need an if statement for when guesses remaining = 0
+        // increase game total by one 
+        // show correct word
         // show message that user lost
         // flip isPlaying var to false 
         if (game.numGuesses === 0) {
             game.isPlaying = false;
+
+            // fill-in blanks with correct word 
+            // loop through correct word, select span, and fill span with letter
+            // passed test
+            for (i = 0; i < game.word.length; i++) {
+                game.render('.span-' + i, game.word[i].toUpperCase());
+            }
 
             game.gameCount++;
             game.render('#games-span', game.gameCount);
@@ -199,6 +182,7 @@ document.onkeyup = function(event) {
         // reset the game second time enter this if statement
         if (game.endCount > 1) {
             game.render('#word-p', '');
+            game.render('#message-p', '');
             game.render('#letters-p', 'Letters already guessed: ');
             game.wordBlankGenerator();
             game.render('#guess-span', game.numGuesses);
