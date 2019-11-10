@@ -4,6 +4,7 @@
 
 // create object 
 var game = {
+    gameCount: 0,
     wins: 0,
     wordBank: ["baseball", "hockey", "football", "soccer", "basketball", "rowing", "softball", "volleyball", "golf", "swimming", "tennis", "lacrosse", "gymnastics", "badminton","cricket", "kickball", "skateboarding", "surfing", "snowboarding", "skiing", "wakeboarding", "dodgeball", "quidditch", "frisbee", "cycling", "wrestling", "boxing", "karate", "taekwondo", "billiards", "snooker", "foosball", "rugby", "curling", "triathlon", "polo", "diving"],
     word: 'string',
@@ -160,6 +161,9 @@ document.onkeyup = function(event) {
             game.wins++;
             game.render('#wins-span', game.wins);
 
+            game.gameCount++;
+            game.render('#games-span', game.gameCount);
+
             // empty p#word-p and replace with message
 
             game.endMessage("You win! Thanks for playing! Press any key to play again");
@@ -183,14 +187,14 @@ document.onkeyup = function(event) {
         if (game.numGuesses === 0) {
             game.isPlaying = false;
 
-            // empty p#word-p and replace with message
+            game.gameCount++;
+            game.render('#games-span', game.gameCount);
 
             game.endMessage("Game over! Thanks for playing! Press any key to play again")
         }
     }
 
     if (!game.isPlaying) {
-        // console.log("reached last if statement");
         game.endCount++;
         // reset the game second time enter this if statement
         if (game.endCount > 1) {
