@@ -6,7 +6,7 @@
 var game = {
     gameCount: 0,
     wins: 0,
-    wordBank: ["baseball", "hockey", "football", "soccer", "basketball", "rowing", "softball", "volleyball", "golf", "swimming", "tennis", "lacrosse", "gymnastics", "badminton","cricket", "kickball", "skateboarding", "surfing", "snowboarding", "skiing", "wakeboarding", "dodgeball", "quidditch", "frisbee", "cycling", "wrestling", "boxing", "karate", "taekwondo", "billiards", "snooker", "foosball", "rugby", "curling", "triathlon", "polo", "diving", "bandy", "bowling", "darts", "handball", "running", "archery", "equestrian", "sailing", "weightlifting", "luge", "skeleton", "bobsleigh"],
+    wordBank: ["baseball", "hockey", "football", "soccer", "basketball", "rowing", "softball", "volleyball", "golf", "swimming", "tennis", "lacrosse", "gymnastics", "badminton","cricket", "kickball", "skateboarding", "surfing", "snowboarding", "skiing", "wakeboarding", "dodgeball", "quidditch", "frisbee", "cycling", "wrestling", "boxing", "karate", "taekwondo", "billiards", "snooker", "foosball", "rugby", "curling", "triathlon", "polo", "diving", "bandy", "bowling", "darts", "handball", "running", "archery", "equestrian", "sailing", "weightlifting", "luge", "skeleton", "bobsleigh", "judo", "fencing"],
     word: 'string',
     numGuesses: 0,
     userGuesses: [],
@@ -84,6 +84,11 @@ var game = {
         // want to return number of guesses inside this method so that the word generator is only run one time 
         this.numGuesses = Math.round(this.word.length + 1);
 
+        // max guesses is 10
+        if (this.numGuesses > 10) {
+            this.numGuesses = 10;
+        }
+
         // number of blankspaces to track user progress
         this.blankSpaces = this.word.length;
     },
@@ -91,10 +96,19 @@ var game = {
     endMessage(message) {
         this.render('#message-p', '');
         this.addText('span', message, '#message-p', 'p-message');
+    },
+
+    // add background image to .image div 
+    endImage(displayValue, displayImageBoolean) {
+        var image = this.getDomElement(".image")
+        image.style.display = displayValue;
+
+        if (displayImageBoolean) {
+            image.style.backgroundImage = `url(./assets/images/${this.word}.jpg)`;
+        }
     }
 };
 
-// game.render('wins-span', 10);
 game.wordBlankGenerator();
 game.render('#guess-span', game.numGuesses);
 
@@ -102,10 +116,11 @@ game.render('#guess-span', game.numGuesses);
 document.onkeyup = function(event) {
     var userLetter = event.key.toLowerCase();
 
-    // reset game.correctAnswer to always start false
+    // reset correctAnswer to always start false
     var correctAnswer = false;
+
     // check if user input is a letter 
-    // also checked if user already guessed that letter
+    // also check if user already guessed that letter
     // otherwise, do nothing
     if (game.letterBank.indexOf(userLetter) > -1 && game.isPlaying) {
 
@@ -146,13 +161,15 @@ document.onkeyup = function(event) {
             game.gameCount++;
             game.render('#games-span', game.gameCount);
 
-            game.endMessage("You win! Thanks for playing! Press any key to play again");
-
-            // should probably randomly pull from end messages array 
+            // randomly pull from end messages array if user wins more than 3 times
             if (game.wins > 3) {
                 const message = game.winMessageGenerator();
                 game.endMessage(message);
+            } else {
+                game.endMessage("You win! Thanks for playing! Press any key to play again");
             }
+
+            game.endImage('block', true);
         }
 
         // need an if statement for when guesses remaining = 0
@@ -173,7 +190,8 @@ document.onkeyup = function(event) {
             game.gameCount++;
             game.render('#games-span', game.gameCount);
 
-            game.endMessage("Game over! Thanks for playing! Press any key to play again")
+            game.endMessage("Game over! Thanks for playing! Press any key to play again");
+            game.endImage("block", true);
         }
     }
 
@@ -186,6 +204,7 @@ document.onkeyup = function(event) {
             game.render('#letters-p', 'Letters already guessed: ');
             game.wordBlankGenerator();
             game.render('#guess-span', game.numGuesses);
+            game.endImage('none', false);
             game.endCount = 0;
             game.isPlaying = true;
             game.userGuesses = [];

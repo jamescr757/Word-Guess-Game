@@ -26,3 +26,13 @@ p {
 #letters-p span {
     font-size: 1.25rem;
 }
+
+.image {
+    background-position: center;
+    background-size: cover;
+    height: 250px;
+    width: 300px;
+    border: black 2px solid;
+    margin-top: 0.5rem;
+    display: none;
+}
