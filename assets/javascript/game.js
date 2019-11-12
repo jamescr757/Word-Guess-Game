@@ -99,9 +99,13 @@ var game = {
     },
 
     // add background image to .image div 
-    endImage(displayValue, displayImageBoolean) {
+    endImage(displayValue, displayImageBoolean, containerColor) {
         var image = this.getDomElement(".image")
         image.style.display = displayValue;
+
+        var imageContainer = this.getDomElement(".bottom-container");
+        imageContainer.style.border = `${containerColor} 2px solid`;
+        imageContainer.style.backgroundColor = `${containerColor}`;
 
         if (displayImageBoolean) {
             image.style.backgroundImage = `url(./assets/images/${this.word}.jpg)`;
@@ -169,7 +173,7 @@ document.onkeyup = function(event) {
                 game.endMessage("You win! Thanks for playing! Press any key to play again");
             }
 
-            game.endImage('block', true);
+            game.endImage('block', true, 'white');
         }
 
         // need an if statement for when guesses remaining = 0
@@ -191,7 +195,7 @@ document.onkeyup = function(event) {
             game.render('#games-span', game.gameCount);
 
             game.endMessage("Game over! Thanks for playing! Press any key to play again");
-            game.endImage("block", true);
+            game.endImage("block", true, "white");
         }
     }
 
@@ -201,10 +205,10 @@ document.onkeyup = function(event) {
         if (game.endCount > 1) {
             game.render('#word-p', '');
             game.render('#message-p', '');
-            game.render('#letters-p', 'Letters already guessed: ');
+            game.render('#letters-p', 'Letters guessed: ');
             game.wordBlankGenerator();
             game.render('#guess-span', game.numGuesses);
-            game.endImage('none', false);
+            game.endImage('none', false, "black");
             game.endCount = 0;
             game.isPlaying = true;
             game.userGuesses = [];

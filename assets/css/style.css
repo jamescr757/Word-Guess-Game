@@ -1,20 +1,48 @@
 body {
     margin: 0.5rem;
+    background-color: black;
+    color: white;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 h1 {
-    font-size: 1.75rem;
-    margin: 1rem 0;
+    font-size: 2.5rem;
+    margin: 1.5rem 0;
     font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
 p {
-    margin: 1rem 0;
+    font-size: 1rem;
+    margin: 1rem 0.75rem;
+}
+
+#title {
+    text-align: center;
+    font-size: 1.25rem;
+}
+
+#current-word {
+    text-align: center;
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+    margin-top: 0.5rem;
+}
+
+#word-p {
+    text-align: center;
+    margin-bottom: 1.75rem;
 }
 
 #message-p {
-    font-weight: bold;
-    color: blue;
     font-size: 1.25rem;
 }
 
@@ -23,16 +51,38 @@ p {
     font-size: 1.25rem;
 }
 
+#word-p span:last-child {
+    margin-right: 0;
+}
+
 #letters-p span {
     font-size: 1.25rem;
+}
+
+.top-container {
+    border: white 2px solid;
+    height: 330px;
+    width: 350px;
+}
+
+.bottom-container {
+    height: 305px;
+    width: 350px;
+}
+
+.bottom-container {
+    margin-top: 2rem;
+    display: flex;  
+    align-items: center;
+    justify-content: center;
+    border: black 2px solid;
 }
 
 .image {
     background-position: center;
     background-size: cover;
-    height: 250px;
+    height: 255px;
     width: 300px;
-    border: black 2px solid;
-    margin-top: 0.5rem;
+    border: black 3px solid;
     display: none;
 }
